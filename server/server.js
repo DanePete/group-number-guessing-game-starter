@@ -3,9 +3,12 @@ const bodyParser = require('body-parser')
 const app = express();
 const PORT = 5000;
 let currentGuesses = [];
+let comparedGuesses = [];
+let guesses;
 // Get Response from client
 
 // This must be added before GET & POST routes.
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}))
 
 // Serve up static files (HTML, CSS, Client JS)
@@ -13,9 +16,9 @@ app.use(express.static('server/public'));
 
 
 app.post('/guesses', function(req,res) {
-  
-  let currentGuesses = req.body;
-  // currentGuesses.push(guesses);
+  guesses = req.body;
+  console.log(guesses);
+  compareGuesses(guesses);
 });
 
 app.get('/guesses', function(req, res){
@@ -26,20 +29,23 @@ function randomGenerator() {
   return Math.floor(Math.random() * 25) + 1;
 }
 
+app.get('/comparedGuesses', (req, res) => {
+  res.send(compareGuesses(guesses));
+});
 
-function compareGuesses() {
-  let num = randomGenerator();
-  
+function compareGuesses(guesses) {
+  let ranNum = randomGenerator();
+  let numOfGuesses = guesses.length;
+  for (guess of guesses) {
+    if(Number(guess.guess) === ranNum) {
+        let returnObject = {correct: guess.name, numguesses: numOfGuesses}
+        return returnObject;
+    } else {
+      let returnObject = {correct: 'failed guess, try again!', numguesses: numOfGuesses}
+      return returnObject;
+    }
+  }
 }
-
-// GET & POST Routes go here
-// app.get('/randomNumber', function(req, res){
-//   const rndInt = Math.floor(Math.random() * 25) + 1
-//   console.log('send back number');
-//   console.log('request is', req);
-//   //send back to client
-//   res.send({num: rndInt});
-// }); 
 
 app.listen(PORT, () => {
   //console.log ('Server is running on port', PORT)

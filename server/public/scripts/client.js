@@ -14,16 +14,16 @@ function submitGuess() {
     console.log($( this ).val()); // Log current input
     // Push created object to array. 
     // guesses.push({guess: $( this ).val(), name: $( this ).data('name')});
-    let jsonPost = {guess: $( this ).val(), name: $( this ).data('name'), "id": 1}
+    let jsonPost = {guess: $( this ).val(), name: $( this ).data('name')}
     guesses.push(jsonPost);
   });
 
-  console.log('line 21 guesses',guesses);
-
+  // POST
   $.ajax({ 
     method: 'POST',
     url:'/guesses',
     data: JSON.stringify(guesses),
+    // data: {JSON.stringify(guesses)},
     contentType: 'application/json'
   }).then(function(response) {
     console.log('we are not getting here');
@@ -31,6 +31,23 @@ function submitGuess() {
   }).catch((error) => {
     console.log('failed', error);
     $('body').prepend('<h2>ERROR</h2>');
+  });
+
+  // GET
+  $.ajax({
+    type: 'GET',
+    url: '/comparedGuesses'
+  }).then(function (response) {
+    console.log(response);
+    // for (let i = 0; i < response.length; i++) {
+    //     let song = response[i];
+    //     $('#songTableBody').append(`
+    //         <tr>
+    //             <td>${song.title}</td>
+    //             <td>${song.artist}</td>
+    //         </tr>
+    //     `);
+    // }
   });
  
   console.log('our guesses are', guesses); // Check our finished array.
