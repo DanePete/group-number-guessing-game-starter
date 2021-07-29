@@ -1,0 +1,3 @@
+ - [ ] ClientPost Guesses through the form
+ - [ ] Server Calculates Results
+ - [ ] Client Gets Results
