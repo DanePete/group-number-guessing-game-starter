@@ -28,6 +28,10 @@ Take a moment to discuss with your team members why this is something that a cli
 
 Once you get it working, style it up, yo!
 
+
+
+
+
 Stretch Goals:
 -
 
