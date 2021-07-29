@@ -17,5 +17,10 @@ function submitGuess(){
 let count = 0;
 function roundCounter(){
   count++;
-   
+   console.log($('#counter'));
+   $('#counter').append (
+    `
+      <p>Count is: ${count}</p>
+    `
+   );
 }//end roundCounter
