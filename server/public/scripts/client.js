@@ -39,6 +39,10 @@ function submitGuess() {
     url: '/comparedGuesses'
   }).then(function (response) {
     console.log(response);
+    $('#counter').append(`
+      <p>Number of guesses ${response.numguesses}</p>
+      <h3>WINNER: ${response.value}</h3>
+    `)
     // for (let i = 0; i < response.length; i++) {
     //     let song = response[i];
     //     $('#songTableBody').append(`
