@@ -43,6 +43,8 @@ function submitGuess() {
       <p>Number of guesses ${response.numguesses}</p>
       <h3>WINNER: ${response.value}</h3>
     `)
+    console.log('guess history',response.guessHistory);
+    // $('#guess-history').append()
     // for (let i = 0; i < response.length; i++) {
     //     let song = response[i];
     //     $('#songTableBody').append(`

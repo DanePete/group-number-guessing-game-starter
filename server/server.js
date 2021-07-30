@@ -1,8 +1,12 @@
 const express = require('express');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const { response } = require('express');
 const app = express();
 const PORT = 5000;
+
 let guesses;
+let guessHistory = [];
+let returnObject;
 // Get Response from client
 
 // This must be added before GET & POST routes.
@@ -15,8 +19,14 @@ app.use(express.static('server/public'));
 // POST
 app.post('/guesses', function(req,res) {
   guesses = req.body;
-  console.log(guesses);
-  compareGuesses(guesses);
+  
+  // an array inside of another array
+  for (item of guesses) {
+    guessHistory.push(item);
+  }
+
+  console.log('post request server guessHistory', guessHistory);
+  compareGuesses(guesses, guessHistory);
 });
 
 // GET
@@ -31,24 +41,27 @@ function randomGenerator() {
 }
 
 // Compared Guesses
+function compareGuesses(guesses, guessHistory) {
+  console.log('server guess history', guessHistory);
+  let ranNum = randomGenerator();
+  let numOfGuesses = guesses.length;
+  for (item of guesses) {
+    console.log('item guess is', Number(item.guess));
+    console.log('random number', ranNum);
+    if(Number(item.guess) === ranNum) {
+      returnObject = {value: item.name, numguesses: numOfGuesses, history: guessHistory}
+    } else {
+      returnObject = {value: 'No match try again!', numguesses: numOfGuesses, history: guessHistory}
+    }
+  }
+  return returnObject;
+}
+
+// Compared Guesses
 app.get('/comparedGuesses', (req, res) => {
   res.send(compareGuesses(guesses));
 });
 
-// Compared Guesses
-function compareGuesses(guesses) {
-  let ranNum = randomGenerator();
-  let numOfGuesses = guesses.length;
-  for (guess of guesses) {
-    if(Number(guess.guess) === ranNum) {
-        let returnObject = {value: guess.name, numguesses: numOfGuesses}
-        return returnObject;
-    } else {
-      let returnObject = {value: 'failed guess, try again!', numguesses: numOfGuesses}
-      return returnObject;
-    }
-  }
-}
 
 app.listen(PORT, () => {
   //console.log ('Server is running on port', PORT)
